@@ -13,17 +13,22 @@ var colorschemes = {
 	},
 	autumn: {
 		weights: [2, 1],
-		firstColor: [35, 10, 90, 10, 30, 5],
-		secondColor: [40, 8, 55, 10, 45, 5],
+		firstColor: [35, 10, 70, 10, 35, 5],
+		secondColor: [40, 8, 55, 10, 55, 5],
 	},
 	winter: {
 		weights: [4, 1],
-		firstColor: [0, 10, 90, 10, 30, 5],
-		secondColor: [40, 10, 80, 10, 45, 5],
+		firstColor: [220, 10, 60, 10, 60, 8],
+		secondColor: [230, 8, 100, 10, 70, 5],
+	},
+	rainbow: {
+		weights: [1, 0],
+		firstColor: [0, 10000, 70, 10, 65, 10],
+		secondColor: [0, 10, 70, 10, 70, 5],
 	},
 };
 
-var currentColor = 'winter';
+var currentColor = 'rainbow';
 
 //draws rectangles on canvas
 function draw() {
@@ -58,6 +63,14 @@ function refreshButtonHandler() {
 	draw();
 }
 
+function changeColorScheme() {
+	currentColor = document.getElementById('colorscheme').value;
+	console.log(currentColor);
+	clearCanvas();
+	setNewColors(10);
+	draw();
+}
+
 //clears the canvas
 function clearCanvas() {
 	const canvas = document.getElementById('canvas');
@@ -80,26 +93,27 @@ function setNewColors(steps) {
 //draws a random color in hsl according to a gaussian distribution
 //hsl(hue, saturation, lightness)
 function getColor() {
-	let first =
-		'hsl(' +
-		drawGaussianSample(220, 10) +
-		',' +
-		drawGaussianSample(60, 20) +
-		'%,' +
-		drawGaussianSample(40, 8) +
-		'%)';
-	let second =
-		'hsl(' +
-		drawGaussianSample(230, 8) +
-		',' +
-		drawGaussianSample(100, 10) +
-		'%,' +
-		drawGaussianSample(70, 5) +
-		'%)';
+	let firstColor = colorschemes[currentColor].firstColor;
+	let secondColor = colorschemes[currentColor].secondColor;
+	let first = 'hsl(';
+	let second = 'hsl(';
+	for (let i = 0; i < 3; i++) {
+		first += drawGaussianSample(firstColor[i * 2], firstColor[i * 2 + 1]);
+		second += drawGaussianSample(secondColor[i * 2], secondColor[i * 2 + 1]);
+		if (i > 0) {
+			first += '%';
+			second += '%';
+		}
+		if (i < 2) {
+			first += ', ';
+			second += ', ';
+		}
+	}
+	first += ')';
+	second += ')';
 	let weight = getRandomInt(
 		colorschemes[currentColor].weights.reduce((a, b) => a + b, 0)
 	); //0 or 1
-
 	return weight < colorschemes[currentColor].weights[0] ? first : second;
 }
 
