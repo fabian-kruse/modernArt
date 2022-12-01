@@ -140,6 +140,8 @@ function setupCanvas(canvas) {
 	canvas.setAttribute('height', style_height);
 	canvas.setAttribute('width', style_width);
 	var ctx = canvas.getContext('2d');
+	ctx.fillStyle = 'white';
+	ctx.fillRect(0, 0, canvas.width, canvas.height);
 	return ctx;
 }
 

@@ -13,15 +13,10 @@ body {
     border: 2px solid black
 }
 
-.button_container {
+.option_container {
     margin-left: 10%;
-    border: 1px solid red;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-}
-
-#refresh_button {
-    border: 1px solid red;
 }
